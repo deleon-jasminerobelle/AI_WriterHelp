@@ -1,0 +1,6 @@
+- [x] Create requirements.txt with Flask and requests
+- [x] Create app.py with Flask app, route for home and generate
+- [x] Create templates/index.html with form for prompt and tone selection
+- [x] Create static/css/style.css for basic styling
+- [x] Test the app by running it
+- [x] Improve UI/UX with modern design, hero section, cards, copy button, responsive layout
