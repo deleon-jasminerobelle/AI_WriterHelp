@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grammar Checker - AI Writing Assistant</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="hero">
+        <div class="hero-content">
+            <h1><i class="fas fa-spell-check"></i> Grammar Checker</h1>
+            <p>Polish your writing with AI-powered grammar correction and suggestions</p>
+            <div class="hero-stats">
+                <div class="stat"><i class="fas fa-check-circle"></i> Instant Correction</div>
+                <div class="stat"><i class="fas fa-lightbulb"></i> Smart Suggestions</div>
+                <div class="stat"><i class="fas fa-copy"></i> Easy Copy</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="card">
+            <div class="card-header">
+                <h2><i class="fas fa-edit"></i> Check Your Grammar</h2>
+                <p>Paste your text below and get instant grammar corrections and writing improvements</p>
+            </div>
+
+            <form method="POST" action="/grammar-checker" class="form" id="grammar-form">
+                <div class="form-group">
+                    <label for="text"><i class="fas fa-file-alt"></i> Your Text</label>
+                    <textarea id="text" name="text" rows="8" placeholder="Paste your text here to check grammar and improve writing...">{{ original if original else '' }}</textarea>
+                </div>
+
+                <button type="submit" class="btn-primary" id="check-btn">
+                    <i class="fas fa-search"></i> Check Grammar
+                </button>
+            </form>
+
+            <div id="loading" class="loading" style="display: none;">
+                <div class="spinner"></div>
+                <p>AI is checking your grammar...</p>
+            </div>
+
+            {% if corrected %}
+                <div class="result-card">
+                    <div class="result-header">
+                        <h3><i class="fas fa-star"></i> Corrected Version</h3>
+                        <div class="result-actions">
+                            <button class="copy-btn" onclick="copyToClipboard()">
+                                <i class="fas fa-copy"></i> Copy
+                            </button>
+                            <button class="regenerate-btn" onclick="regenerate()">
+                                <i class="fas fa-redo"></i> Recheck
+                            </button>
+                        </div>
+                    </div>
+                    <div class="result-content">
+                        <div id="result-text" class="writing-suggestion">{{ corrected }}</div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <script>
+        function copyToClipboard() {
+            const text = document.getElementById('result-text').innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                showNotification('Copied to clipboard!');
+            });
+        }
+
+        function regenerate() {
+            document.getElementById('grammar-form').submit();
+        }
+
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            notification.innerHTML = `<i class="fas fa-check"></i> ${message}`;
+            document.body.appendChild(notification);
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        document.getElementById('grammar-form').addEventListener('submit', function() {
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('check-btn').disabled = true;
+            document.getElementById('check-btn').innerHTML = '<i class="fas fa-spinner fa-spin"></i> Checking...';
+        });
+    </script>
+</body>
+</html>

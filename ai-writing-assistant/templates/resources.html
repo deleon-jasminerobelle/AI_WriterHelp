@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resources - AI Writing Assistant</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="hero">
+        <div class="hero-content">
+            <h1><i class="fas fa-book"></i> Writing Resources</h1>
+            <p>Discover curated resources to enhance your writing skills and knowledge</p>
+            <div class="hero-stats">
+                <div class="stat"><i class="fas fa-link"></i> Curated Links</div>
+                <div class="stat"><i class="fas fa-brain"></i> Learning Tools</div>
+                <div class="stat"><i class="fas fa-star"></i> Quality Content</div>
+            </div>
+            <div class="hero-nav">
+                <a href="/" class="nav-link"><i class="fas fa-home"></i> Home</a>
+                <a href="/grammar-checker" class="nav-link"><i class="fas fa-spell-check"></i> Grammar Checker</a>
+                <a href="/templates" class="nav-link"><i class="fas fa-file-alt"></i> Templates</a>
+                <a href="/tips" class="nav-link"><i class="fas fa-lightbulb"></i> Tips</a>
+                <a href="/editor" class="nav-link"><i class="fas fa-edit"></i> Editor</a>
+                <a href="/resources" class="nav-link active"><i class="fas fa-book"></i> Resources</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="card">
+            <div class="card-header">
+                <h2><i class="fas fa-search"></i> Find Writing Resources</h2>
+                <p>Search for writing resources and get AI-curated recommendations</p>
+            </div>
+
+            <form method="POST" action="/resources" class="form" id="resources-form">
+                <div class="form-group">
+                    <label for="query"><i class="fas fa-search"></i> What writing resources are you looking for?</label>
+                    <textarea id="query" name="query" rows="3" placeholder="e.g., Books on creative writing, Online courses for business writing, Grammar guides">{{ query if query else '' }}</textarea>
+                </div>
+
+                <button type="submit" class="btn-primary" id="search-btn">
+                    <i class="fas fa-search"></i> Find Resources
+                </button>
+            </form>
+
+            <div id="loading" class="loading" style="display: none;">
+                <div class="spinner"></div>
+                <p>AI is finding resources...</p>
+            </div>
+
+            {% if resources %}
+                <div class="result-card">
+                    <div class="result-header">
+                        <h3><i class="fas fa-star"></i> Recommended Resources</h3>
+                        <div class="result-actions">
+                            <button class="copy-btn" onclick="copyToClipboard()">
+                                <i class="fas fa-copy"></i> Copy
+                            </button>
+                            <button class="regenerate-btn" onclick="regenerate()">
+                                <i class="fas fa-redo"></i> Search Again
+                            </button>
+                        </div>
+                    </div>
+                    <div class="result-content">
+                        <div id="result-text" class="writing-suggestion">{{ resources }}</div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <script>
+        function copyToClipboard() {
+            const text = document.getElementById('result-text').innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                showNotification('Copied to clipboard!');
+            });
+        }
+
+        function regenerate() {
+            document.getElementById('resources-form').submit();
+        }
+
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            notification.innerHTML = `<i class="fas fa-check"></i> ${message}`;
+            document.body.appendChild(notification);
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        document.getElementById('resources-form').addEventListener('submit', function() {
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('search-btn').disabled = true;
+            document.getElementById('search-btn').innerHTML = '<i class="fas fa-spinner fa-spin"></i> Searching...';
+        });
+    </script>
+</body>
+</html>

@@ -379,6 +379,30 @@ select option {
     }
 }
 
+/* Hero navigation */
+.hero-nav {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 30px;
+}
+
+.nav-link {
+    color: white;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 25px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+}
+
+.nav-link:hover, .nav-link.active {
+    background: #8B0000;
+    border-color: #DC143C;
+}
+
 /* Responsive design */
 @media (max-width: 768px) {
     .hero-content h1 {
@@ -392,6 +416,11 @@ select option {
     .hero-stats {
         flex-direction: column;
         gap: 15px;
+    }
+
+    .hero-nav {
+        flex-direction: column;
+        gap: 10px;
     }
 
     .container {

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Writing Templates - AI Writing Assistant</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="hero">
+        <div class="hero-content">
+            <h1><i class="fas fa-file-alt"></i> Writing Templates</h1>
+            <p>Get started with professionally crafted templates for various writing needs</p>
+            <div class="hero-stats">
+                <div class="stat"><i class="fas fa-th-large"></i> Multiple Categories</div>
+                <div class="stat"><i class="fas fa-magic"></i> AI-Generated</div>
+                <div class="stat"><i class="fas fa-copy"></i> Easy Copy</div>
+            </div>
+            <div class="hero-nav">
+                <a href="/" class="nav-link"><i class="fas fa-home"></i> Home</a>
+                <a href="/grammar-checker" class="nav-link"><i class="fas fa-spell-check"></i> Grammar Checker</a>
+                <a href="/templates" class="nav-link active"><i class="fas fa-file-alt"></i> Templates</a>
+                <a href="/tips" class="nav-link"><i class="fas fa-lightbulb"></i> Tips</a>
+                <a href="/editor" class="nav-link"><i class="fas fa-edit"></i> Editor</a>
+                <a href="/resources" class="nav-link"><i class="fas fa-book"></i> Resources</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="card">
+            <div class="card-header">
+                <h2><i class="fas fa-list"></i> Choose a Template Category</h2>
+                <p>Select a category and get AI-generated templates to kickstart your writing</p>
+            </div>
+
+            <form method="POST" action="/templates" class="form" id="template-form">
+                <div class="form-group">
+                    <label for="category"><i class="fas fa-tags"></i> Template Category</label>
+                    <select id="category" name="category">
+                        <option value="email">📧 Email</option>
+                        <option value="social-media">📱 Social Media</option>
+                        <option value="blog-post">📝 Blog Post</option>
+                        <option value="cover-letter">💼 Cover Letter</option>
+                        <option value="business-proposal">📄 Business Proposal</option>
+                        <option value="press-release">📰 Press Release</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn-primary" id="generate-btn">
+                    <i class="fas fa-sparkles"></i> Generate Template
+                </button>
+            </form>
+
+            <div id="loading" class="loading" style="display: none;">
+                <div class="spinner"></div>
+                <p>AI is creating your template...</p>
+            </div>
+
+            {% if template %}
+                <div class="result-card">
+                    <div class="result-header">
+                        <h3><i class="fas fa-star"></i> Your Template</h3>
+                        <div class="result-actions">
+                            <button class="copy-btn" onclick="copyToClipboard()">
+                                <i class="fas fa-copy"></i> Copy
+                            </button>
+                            <button class="regenerate-btn" onclick="regenerate()">
+                                <i class="fas fa-redo"></i> Regenerate
+                            </button>
+                        </div>
+                    </div>
+                    <div class="result-content">
+                        <div id="result-text" class="writing-suggestion">{{ template }}</div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <script>
+        function copyToClipboard() {
+            const text = document.getElementById('result-text').innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                showNotification('Copied to clipboard!');
+            });
+        }
+
+        function regenerate() {
+            document.getElementById('template-form').submit();
+        }
+
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            notification.innerHTML = `<i class="fas fa-check"></i> ${message}`;
+            document.body.appendChild(notification);
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        document.getElementById('template-form').addEventListener('submit', function() {
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('generate-btn').disabled = true;
+            document.getElementById('generate-btn').innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
+        });
+    </script>
+</body>
+</html>
